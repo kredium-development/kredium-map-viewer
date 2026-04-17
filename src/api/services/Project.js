@@ -18,46 +18,33 @@ export default class ProjectService {
 
     const CLOUDFRONT = 'https://dnodhcqyo2y9j.cloudfront.net';
 
-    if (import.meta.env.DEV) {
-      const rewriteUrl = (url) => {
-        if (!url) return url;
+    const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+
+    const normalizeUrl = (url) => {
+      if (!url) return url;
+      if (isLocalhost) {
         for (const origin of ['https://api.kredium.io', CLOUDFRONT]) {
           if (url.startsWith(origin)) return '/proxy-assets' + url.slice(origin.length);
         }
         return url;
-      };
-      const rewriteImages = (images) => {
-        if (!Array.isArray(images)) return;
-        images.forEach(img => {
-          img.filename = rewriteUrl(img.filename);
-          (img.views ?? []).forEach(v => { v.video_filename = rewriteUrl(v.video_filename); });
-        });
-      };
-      rewriteImages(payload?.project?.images);
-      rewriteImages(payload?.project?.images_night);
-    } else {
-      const normalizeUrl = (url) => {
-        if (!url) return url;
-        // Strip known origins to get a bare path
-        if (url.startsWith('https://api.kredium.io')) url = url.slice('https://api.kredium.io'.length);
-        else if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
-        // At this point url is either a path or an unrecognised absolute URL
-        if (url.startsWith('http')) return url;
-        // Ensure leading slash then strip /proxy-assets if present
-        if (!url.startsWith('/')) url = '/' + url;
-        if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
-        return CLOUDFRONT + url;
-      };
-      const normalizeImages = (images) => {
-        if (!Array.isArray(images)) return;
-        images.forEach(img => {
-          img.filename = normalizeUrl(img.filename);
-          (img.views ?? []).forEach(v => { v.video_filename = normalizeUrl(v.video_filename); });
-        });
-      };
-      normalizeImages(payload?.project?.images);
-      normalizeImages(payload?.project?.images_night);
-    }
+      }
+      if (url.startsWith('https://api.kredium.io')) url = url.slice('https://api.kredium.io'.length);
+      else if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
+      if (url.startsWith('http')) return url;
+      if (!url.startsWith('/')) url = '/' + url;
+      if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
+      return CLOUDFRONT + url;
+    };
+
+    const normalizeImages = (images) => {
+      if (!Array.isArray(images)) return;
+      images.forEach(img => {
+        img.filename = normalizeUrl(img.filename);
+        (img.views ?? []).forEach(v => { v.video_filename = normalizeUrl(v.video_filename); });
+      });
+    };
+    normalizeImages(payload?.project?.images);
+    normalizeImages(payload?.project?.images_night);
 
     console.log("FIRST PROJECT IMAGE", payload?.project?.images?.[0]);
     console.log("RPC RAW DATA", data);
