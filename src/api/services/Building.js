@@ -20,10 +20,12 @@ export default class BuildingService {
 
     const payload = data?.data ?? data ?? {};
 
+    const CLOUDFRONT = 'https://dnodhcqyo2y9j.cloudfront.net';
+
     if (import.meta.env.DEV) {
       const rewriteUrl = (url) => {
         if (!url) return url;
-        for (const origin of ['https://dnodhcqyo2y9j.cloudfront.net', 'https://api.kredium.io']) {
+        for (const origin of [CLOUDFRONT, 'https://api.kredium.io']) {
           if (url.startsWith(origin)) return '/proxy-assets' + url.slice(origin.length);
         }
         return url;
@@ -37,6 +39,22 @@ export default class BuildingService {
       };
       rewriteImages(payload?.building?.images);
       rewriteImages(payload?.building?.images_night);
+    } else {
+      const normalizeUrl = (url) => {
+        if (!url) return url;
+        if (url.startsWith('https://api.kredium.io')) return CLOUDFRONT + url.slice('https://api.kredium.io'.length);
+        if (!url.startsWith('http')) return CLOUDFRONT + (url.startsWith('/') ? '' : '/') + url;
+        return url;
+      };
+      const normalizeImages = (images) => {
+        if (!Array.isArray(images)) return;
+        images.forEach(img => {
+          img.filename = normalizeUrl(img.filename);
+          (img.views ?? []).forEach(v => { v.video_filename = normalizeUrl(v.video_filename); });
+        });
+      };
+      normalizeImages(payload?.building?.images);
+      normalizeImages(payload?.building?.images_night);
     }
 
     console.log("FIRST BUILDING IMAGE", payload?.building?.images?.[0]);
