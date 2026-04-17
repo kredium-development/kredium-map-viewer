@@ -42,13 +42,15 @@ export default class BuildingService {
     } else {
       const normalizeUrl = (url) => {
         if (!url) return url;
-        if (url.startsWith('https://api.kredium.io')) return CLOUDFRONT + url.slice('https://api.kredium.io'.length);
-        if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
-        if (!url.startsWith('http')) {
-          const path = url.replace(/^\/proxy-assets/, '');
-          return CLOUDFRONT + (path.startsWith('/') ? '' : '/') + path;
-        }
-        return url;
+        // Strip known origins to get a bare path
+        if (url.startsWith('https://api.kredium.io')) url = url.slice('https://api.kredium.io'.length);
+        else if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
+        // At this point url is either a path or an unrecognised absolute URL
+        if (url.startsWith('http')) return url;
+        // Ensure leading slash then strip /proxy-assets if present
+        if (!url.startsWith('/')) url = '/' + url;
+        if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
+        return CLOUDFRONT + url;
       };
       const normalizeImages = (images) => {
         if (!Array.isArray(images)) return;
