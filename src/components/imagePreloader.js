@@ -1,4 +1,3 @@
-import {workerLoadImage} from "@/worker";
 
 /**
  * Given the images array compute all the views and image between
@@ -134,10 +133,6 @@ const imagePreloadQueue = createImagePreloadQueue(4, 50);
  * @param {boolean} useWorker - Whether to use web worker for loading
  * @returns {Promise[]} - Array of promises that resolve when images are loaded
  */
-export const preloadImages = (images, useWorker = false) => {
-  if (useWorker) {
-    return images.map(img => workerLoadImage(img.url, img.index));
-  } else {
-    return imagePreloadQueue.addBatch(images);
-  }
+export const preloadImages = (images) => {
+  return imagePreloadQueue.addBatch(images);
 }

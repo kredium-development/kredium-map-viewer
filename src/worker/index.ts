@@ -166,27 +166,8 @@ function processNextJob(): void {
  * @param index - The index of the image in the sequence
  * @returns Promise resolving with the loaded ImageBitmap
  */
-export function workerLoadImage(url: string, index: number): Promise<ImageBitmap> {
-  debug('Loading image with worker', url);
-
-  // Create new workers until we reach the limit
-  if (workerPool.length < workerLimit) {
-    debug('Creating new worker');
-    debug('Current worker pool size:', workerPool.length);
-    workerPool.push(new ImageWorker());
-  }
-
-  let availableWorker = workerPool.find(worker => !worker.busy);
-  debug('Number of free workers:', workerPool.filter(worker => !worker.busy).length);
-
-  // If a worker is available, use it immediately
-  if (availableWorker) {
-    return availableWorker.load(url, index);
-  }
-
-  // Otherwise, queue the job and return a promise that will be resolved when a worker becomes available
-  debug(`No available workers, queueing request: ${url}, queue length: ${jobQueue.length}`);
-  return new Promise<ImageBitmap>((resolve, reject) => {
-    jobQueue.push({url, index, resolve, reject});
-  });
+export function workerLoadImage(url: string, _index: number): Promise<ImageBitmap> {
+  // Worker image loading is disabled: CloudFront does not return CORS headers for worker fetch().
+  // All image loading is handled on the main thread via imagePreloader.js.
+  return Promise.reject(new Error(`Worker image loading disabled, cannot load: ${url}`));
 }
