@@ -1,0 +1,21 @@
+.map-button {
+    @apply tw-w-10 tw-h-10;
+    @apply tw-rounded tw-flex tw-items-center tw-justify-center;
+    @apply tw-bg-[#232323] tw-bg-opacity-45 hover:tw-bg-opacity-85;
+    @apply tw-text-white;
+}
+
+.map-amenity-button {
+    @apply tw-transform tw-cursor-pointer -tw-translate-x-1/2 -tw-translate-y-1/2 tw-justify-center tw-flex tw-items-center tw-text-sm tw-relative;
+    @apply tw-bg-[#232323] tw-bg-opacity-85 tw-text-secondary-white tw-z-10;
+    @apply tw-rounded-full tw-border tw-border-silver tw-border-opacity-30 tw-pointer-events-auto;
+}
+
+.map-360-button {
+  @apply tw-h-9 tw-w-9 tw-cursor-pointer;
+  @apply tw-transform -tw-translate-x-1/2 -tw-translate-y-1/2 tw-justify-center tw-flex tw-items-center tw-text-sm tw-relative;
+  @apply tw-bg-[#F8F8F8] tw-bg-opacity-85 tw-text-secondary-white tw-z-10;
+  @apply tw-rounded-full tw-border tw-border-[#232323] tw-border-opacity-30 tw-pointer-events-auto;
+  @apply hover:tw-shadow-[0_0_0_4px_rgba(255,255,255,0.4)] tw-transition-all tw-duration-300;
+}
+
