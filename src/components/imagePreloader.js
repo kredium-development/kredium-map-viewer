@@ -79,17 +79,14 @@ const createImagePreloadQueue = (maxConnections = 4, delayBetweenLoads = 50) => 
     processing++;
 
     setTimeout(async () => {
-      const response = await fetch(item.url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image (${response.status}): ${item.url}`);
-      }
-      const contentType = response.headers.get('content-type') ?? '';
-      if (!contentType.startsWith('image/')) {
-        const preview = await response.clone().text().then(t => t.slice(0, 200)).catch(() => '');
-        throw new Error(`Expected image, got "${contentType}" for ${item.url}. Body: ${preview}`);
-      }
-      const blob = await response.blob();
-      const imageBitmap = await createImageBitmap(blob);
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = () => reject(new Error(`Failed to load image: ${item.url}`));
+        img.src = item.url;
+      });
+      const imageBitmap = await createImageBitmap(img);
       item?.callback({image: imageBitmap, index: item.index, url: item.url});
       processing--;
       processQueue();
