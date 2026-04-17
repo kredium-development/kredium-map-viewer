@@ -20,12 +20,6 @@ export default class ProjectService {
 
     const normalizeUrl = (url) => {
       if (!url) return url;
-      if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-        for (const origin of ['https://api.kredium.io', CLOUDFRONT]) {
-          if (url.startsWith(origin)) return '/proxy-assets' + url.slice(origin.length);
-        }
-        return url;
-      }
       if (url.startsWith('https://api.kredium.io')) url = url.slice('https://api.kredium.io'.length);
       else if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
       if (url.startsWith('http')) return url;
