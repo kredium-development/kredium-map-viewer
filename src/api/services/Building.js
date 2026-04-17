@@ -29,7 +29,7 @@ export default class BuildingService {
       if (url.startsWith('http')) return url;
       if (!url.startsWith('/')) url = '/' + url;
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
-      return CLOUDFRONT + url;
+      return '/cdn' + url;
     };
 
     const normalizeImages = (images) => {
