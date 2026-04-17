@@ -43,7 +43,11 @@ export default class BuildingService {
       const normalizeUrl = (url) => {
         if (!url) return url;
         if (url.startsWith('https://api.kredium.io')) return CLOUDFRONT + url.slice('https://api.kredium.io'.length);
-        if (!url.startsWith('http')) return CLOUDFRONT + (url.startsWith('/') ? '' : '/') + url;
+        if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
+        if (!url.startsWith('http')) {
+          const path = url.replace(/^\/proxy-assets/, '');
+          return CLOUDFRONT + (path.startsWith('/') ? '' : '/') + path;
+        }
         return url;
       };
       const normalizeImages = (images) => {
