@@ -1,13 +1,5 @@
-async function loadImage(url, index) {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch image (${response.status}): ${url}`);
-  }
-  const blob = await response.blob();
-  const imageBitmap = await createImageBitmap(blob);
-  self.postMessage({ message: 'loaded', imageBitmap, index, url }, [imageBitmap]);
-}
-
-self.onmessage = async(e) => {
-    await loadImage(e.data.url, e.data.index);
+// Worker image loading is disabled. CloudFront does not return CORS headers,
+// so fetch() cannot be used here. All image loading is handled on the main thread.
+self.onmessage = (e) => {
+  self.postMessage({ message: 'error', error: 'Worker image loading disabled', index: e.data.index, url: e.data.url });
 }
