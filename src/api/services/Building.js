@@ -22,11 +22,9 @@ export default class BuildingService {
 
     const CLOUDFRONT = 'https://dnodhcqyo2y9j.cloudfront.net';
 
-    const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-
     const normalizeUrl = (url) => {
       if (!url) return url;
-      if (isLocalhost) {
+      if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
         for (const origin of [CLOUDFRONT, 'https://api.kredium.io']) {
           if (url.startsWith(origin)) return '/proxy-assets' + url.slice(origin.length);
         }
