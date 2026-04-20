@@ -5,13 +5,14 @@ export default async function handler(req, res) {
 
   const upstream = await fetch(url, {
     headers: {
-      Origin: 'https://api.kredium.io',
-      Referer: 'https://api.kredium.io/',
+      'User-Agent': 'Mozilla/5.0',
+      'Referer': 'https://kredium.com/',
+      'Origin': 'https://kredium.com',
     },
   });
 
   if (!upstream.ok) {
-    res.status(upstream.status).end();
+    res.status(upstream.status).end(`Upstream error: ${upstream.status} ${upstream.statusText}`);
     return;
   }
 
