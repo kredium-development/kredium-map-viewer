@@ -1,10 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/cdn/(.*)",
-      "destination": "https://dnodhcqyo2y9j.cloudfront.net/$1"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

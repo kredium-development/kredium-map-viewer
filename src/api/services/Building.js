@@ -36,7 +36,7 @@ export default class BuildingService {
       }
       if (!url.startsWith('/')) url = '/' + url;
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
-      return '/cdn' + url;
+      return '/api/cdn' + url;
     };
 
     const normalizeImages = (images) => {
