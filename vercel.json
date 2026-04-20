@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/cdn/:path*",
-      "destination": "https://dnodhcqyo2y9j.cloudfront.net/:path*"
+      "source": "/cdn/(.*)",
+      "destination": "https://dnodhcqyo2y9j.cloudfront.net/$1"
     },
     {
       "source": "/(.*)",
