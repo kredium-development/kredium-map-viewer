@@ -11,6 +11,11 @@ export default async function handler(req, res) {
     },
   });
 
+  console.log('[cdn-proxy] url:', url);
+  console.log('[cdn-proxy] status:', response.status);
+  console.log('[cdn-proxy] content-type:', response.headers.get('content-type'));
+  console.log('[cdn-proxy] content-length:', response.headers.get('content-length'));
+
   if (response.status !== 200) {
     res.status(response.status).send(`CloudFront error: ${response.status}`);
     return;
