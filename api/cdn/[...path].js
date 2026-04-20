@@ -30,10 +30,17 @@ export default async function handler(req, res) {
     return;
   }
 
+  const contentType = response.headers.get('content-type') || 'image/webp';
+  if (contentType.includes('text/html')) {
+    res.status(502).send(`CloudFront returned HTML (likely an error page): ${response.status}`);
+    return;
+  }
+
   const buffer = await response.arrayBuffer();
-  res.setHeader('Content-Type', response.headers.get('content-type') || 'image/webp');
+  res.setHeader('Content-Type', contentType);
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
-  res.status(response.status).send(Buffer.from(buffer));
+  res.setHeader('X-CDN-Proxy', 'hit');
+  res.status(200).send(Buffer.from(buffer));
 }
