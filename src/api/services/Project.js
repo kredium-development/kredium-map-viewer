@@ -33,7 +33,7 @@ export default class ProjectService {
       if (!url.startsWith('/')) url = '/' + url;
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
       const cleanUrl = url.replace(/(\.(webp|jpg|png)).*$/, '$1');
-      return '/api/cdn' + cleanUrl;
+      return '/api/cdn' + cleanUrl + '?t=' + Date.now();
     };
 
     const normalizeImages = (images) => {

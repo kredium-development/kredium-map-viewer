@@ -18,6 +18,8 @@ export default async function handler(req, res) {
 
   const buffer = await response.arrayBuffer();
   res.setHeader('Content-Type', response.headers.get('content-type') || 'image/webp');
-  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.status(response.status).send(Buffer.from(buffer));
 }
