@@ -31,6 +31,9 @@ export default class ProjectService {
         }
       }
       if (!url.startsWith('/')) url = '/' + url;
+      if (url.startsWith('/api/cdn/')) {
+        return url.replace(/(\.(webp|jpg|png)).*$/, '$1') + '?t=' + Date.now();
+      }
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
       const cleanUrl = url.replace(/(\.(webp|jpg|png)).*$/, '$1');
       return '/api/cdn' + cleanUrl + '?t=' + Date.now();

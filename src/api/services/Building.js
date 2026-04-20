@@ -35,6 +35,9 @@ export default class BuildingService {
         }
       }
       if (!url.startsWith('/')) url = '/' + url;
+      if (url.startsWith('/api/cdn/')) {
+        return url.replace(/(\.(webp|jpg|png)).*$/, '$1') + '?t=' + Date.now();
+      }
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
       const cleanUrl = url.replace(/(\.(webp|jpg|png)).*$/, '$1');
       return '/api/cdn' + cleanUrl + '?t=' + Date.now();
@@ -49,6 +52,7 @@ export default class BuildingService {
     };
     normalizeImages(payload?.building?.images);
     normalizeImages(payload?.building?.images_night);
+    normalizeImages(payload?.building?.floor_plates);
 
     console.log("FIRST BUILDING IMAGE", payload?.building?.images?.[0]);
     const building = payload?.building ?? {};
