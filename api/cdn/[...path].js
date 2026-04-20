@@ -1,6 +1,15 @@
 export default async function handler(req, res) {
+  console.log('CDN FUNCTION HIT', { url: req.url, query: req.query });
+
   const segments = req.query.path;
   const pathStr = Array.isArray(segments) ? segments.join('/') : segments ?? '';
+
+  // Temporary: confirm function is reachable before fetching CloudFront
+  if (req.query.ping === '1') {
+    res.status(200).send('OK');
+    return;
+  }
+
   const url = `https://dnodhcqyo2y9j.cloudfront.net/${pathStr}`;
 
   const response = await fetch(url, {
