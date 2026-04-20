@@ -32,7 +32,9 @@ export default async function handler(req, res) {
 
   const contentType = response.headers.get('content-type') || 'image/webp';
   if (contentType.includes('text/html')) {
-    res.status(502).send(`CloudFront returned HTML (likely an error page): ${response.status}`);
+    const body = await response.text();
+    console.log('[cdn-proxy] HTML body (first 500):', body.slice(0, 500));
+    res.status(502).send(`CloudFront HTML error [${response.status}]: ${body.slice(0, 300)}`);
     return;
   }
 
