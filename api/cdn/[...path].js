@@ -2,25 +2,22 @@ export default async function handler(req, res) {
   const segments = req.query.path;
   const pathStr = Array.isArray(segments) ? segments.join('/') : segments ?? '';
   const url = `https://dnodhcqyo2y9j.cloudfront.net/${pathStr}`;
-  const host = req.headers.host;
 
-  const upstream = await fetch(url, {
+  const response = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0',
-      'Referer': `https://${host}/`,
-      'Origin': `https://${host}`,
+      'Referer': 'https://kredium-map-viewer.vercel.app',
+      'Origin': 'https://kredium-map-viewer.vercel.app',
     },
   });
 
-  if (!upstream.ok) {
-    res.status(upstream.status).end(`Upstream error: ${upstream.status} ${upstream.statusText}`);
+  if (response.status !== 200) {
+    res.status(response.status).send(`CloudFront error: ${response.status}`);
     return;
   }
 
-  const contentType = upstream.headers.get('content-type') ?? 'application/octet-stream';
-  res.setHeader('Content-Type', contentType);
+  const buffer = await response.arrayBuffer();
+  res.setHeader('Content-Type', response.headers.get('content-type') || 'image/webp');
   res.setHeader('Cache-Control', 'no-store');
-
-  const buffer = await upstream.arrayBuffer();
-  res.end(Buffer.from(buffer));
+  res.status(response.status).send(Buffer.from(buffer));
 }
