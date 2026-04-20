@@ -38,11 +38,11 @@ export default async function handler(req, res) {
     return;
   }
 
-  const buffer = await response.arrayBuffer();
+  const buffer = Buffer.from(await response.arrayBuffer());
+
   res.setHeader('Content-Type', contentType);
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+  res.setHeader('Content-Length', buffer.length);
   res.setHeader('X-CDN-Proxy', 'hit');
-  res.status(200).send(Buffer.from(buffer));
+
+  res.status(200).end(buffer);
 }
