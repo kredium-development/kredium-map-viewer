@@ -26,7 +26,14 @@ export default class BuildingService {
       if (!url) return url;
       if (url.startsWith('https://api.kredium.io')) url = url.slice('https://api.kredium.io'.length);
       else if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
-      if (url.startsWith('http')) return url;
+      if (url.startsWith('http')) {
+        try {
+          const parsed = new URL(url);
+          url = parsed.pathname;
+        } catch (e) {
+          return url;
+        }
+      }
       if (!url.startsWith('/')) url = '/' + url;
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
       return '/cdn' + url;
