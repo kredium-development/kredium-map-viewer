@@ -241,6 +241,9 @@ const loadNewSvgContent = async () => {
     console.log('[svg-debug] svg_overlay length:', currentView.value?.svg_overlay?.length);
     console.log('[svg-debug] parsedPaths count:', Object.keys(svgMapUnitIdToPath.value).length);
     console.log('[svg-debug] units count:', Object.keys(units).length);
+    console.log('[svg-debug] units sample keys:', Object.keys(units).slice(0, 5));
+    console.log('[svg-debug] first unit object:', Object.values(units)[0]);
+    console.log('[svg-debug] svgMap sample keys:', Object.keys(svgMapUnitIdToPath.value).slice(0, 5));
     highlightPathsByIds(filteredIds.value ?? Object.keys(svgMapUnitIdToPath.value));
   });
 };
