@@ -24,8 +24,8 @@ export default class BuildingService {
 
     const normalizeUrl = (url) => {
       if (!url) return url;
-      if (url.startsWith('https://api.kredium.io')) url = url.slice('https://api.kredium.io'.length);
-      else if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
+      if (url.startsWith('https://api.kredium.io')) return url;
+      if (url.startsWith(CLOUDFRONT)) url = url.slice(CLOUDFRONT.length);
       if (url.startsWith('http')) {
         try {
           const parsed = new URL(url);
