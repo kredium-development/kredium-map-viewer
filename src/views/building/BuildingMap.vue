@@ -317,6 +317,9 @@ const loadBuilding = (keepSettings = false) => {
     .then((res) => {
       breadcrumbs.value = res.data.breadcrumbs;
 
+      console.log('[units-debug] res.data top-level keys:', Object.keys(res.data));
+      console.log('[units-debug] res.data.building keys:', Object.keys(res.data.building ?? {}));
+      console.log('[units-debug] res.data.units (top-level):', res.data.units?.length, res.data.units?.[0]);
       console.log('[units-debug] RPC units array length:', res.data.building.units?.length);
       console.log('[units-debug] RPC first unit:', res.data.building.units?.[0]);
       res.data.building.units.forEach(u => {
