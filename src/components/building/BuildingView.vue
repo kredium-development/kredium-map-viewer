@@ -236,14 +236,6 @@ const parseSvg = () => {
 const loadNewSvgContent = async () => {
   await nextTick(() => {
     parseSvg();
-    console.log('[svg-debug] currentView:', currentView.value);
-    console.log('[svg-debug] svg_overlay present:', !!currentView.value?.svg_overlay);
-    console.log('[svg-debug] svg_overlay length:', currentView.value?.svg_overlay?.length);
-    console.log('[svg-debug] parsedPaths count:', Object.keys(svgMapUnitIdToPath.value).length);
-    console.log('[svg-debug] units count:', Object.keys(units).length);
-    console.log('[svg-debug] units sample keys:', Object.keys(units).slice(0, 5));
-    console.log('[svg-debug] first unit object:', Object.values(units)[0]);
-    console.log('[svg-debug] svgMap sample keys:', Object.keys(svgMapUnitIdToPath.value).slice(0, 5));
     highlightPathsByIds(filteredIds.value ?? Object.keys(svgMapUnitIdToPath.value));
   });
 };
@@ -269,7 +261,6 @@ const highlightPathsByIds = (idList) => {
 
 const highlightPathById = (id) => {
   const path = svgMapUnitIdToPath.value[id];
-  console.log('[svg-debug] highlight attempt:', id, '→ path found:', !!path, '| unit found:', !!units[id]);
   if (path && units[id]) {
     currentlyHighlightedIds.value.push(id);
     path.classList.add("tw-stroke-white", "tw-stroke-[0.5]", "tw-cursor-pointer", "clickable");
