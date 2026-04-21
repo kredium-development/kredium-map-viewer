@@ -5,11 +5,11 @@ import { computed } from 'vue';
 
 const settings = useSettingsStore();
 
-const availableCurrencies = computed(() => settings.getAvailableCurrencies.map((currency) => ({
+const availableCurrencies = computed(() => (settings.getAvailableCurrencies ?? []).map((currency) => ({
   label: currency,
   value: currency,
 })));
-const availableMeasurements = computed(() => settings.getAvailableMeasurements.map((currency) => ({
+const availableMeasurements = computed(() => (settings.getAvailableMeasurements ?? []).map((currency) => ({
   label: currency,
   value: currency,
 })));
