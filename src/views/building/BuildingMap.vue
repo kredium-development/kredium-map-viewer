@@ -60,7 +60,9 @@ const videoReady = ref(false);
 
 
 const onSettingsChanged = (_new, old) => {
+  console.log('[units-debug] onSettingsChanged fired', { _new, old, acceptSettingsUpdate: acceptSettingsUpdate.value });
   if(old !== null && acceptSettingsUpdate.value) {
+    console.log('[units-debug] onSettingsChanged CLEARING units.value');
     acceptSettingsUpdate.value = false;
     units.value = {};
     loadBuilding(true);
@@ -315,11 +317,14 @@ const loadBuilding = (keepSettings = false) => {
     .then((res) => {
       breadcrumbs.value = res.data.breadcrumbs;
 
+      console.log('[units-debug] RPC units array length:', res.data.building.units?.length);
+      console.log('[units-debug] RPC first unit:', res.data.building.units?.[0]);
       res.data.building.units.forEach(u => {
         units.value[u.uuid] = u;
         hasUnitPlans.value = true;
         hasUnits.value = true;
       })
+      console.log('[units-debug] after forEach, units.value keys:', Object.keys(units.value).length);
 
       if(res.data.building.units[0]?.price_currency_code) {
         settingsStore.setDefaults(res.data.building.units[0]?.price_currency_code, res.data.building.units[0]?.area_unit);
