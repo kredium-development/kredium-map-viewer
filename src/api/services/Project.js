@@ -31,12 +31,17 @@ export default class ProjectService {
         }
       }
       if (!url.startsWith('/')) url = '/' + url;
+      if (url.startsWith('/api/cdn?')) {
+        return url;
+      }
       if (url.startsWith('/api/cdn/')) {
-        return url.replace(/(\.(webp|jpg|png)).*$/, '$1') + '?t=' + Date.now();
+        const assetPath = url.replace(/^\/api\/cdn\//, '').replace(/(\.(webp|jpg|png)).*$/, '$1');
+        return '/api/cdn?path=' + encodeURIComponent(assetPath) + '&t=' + Date.now();
       }
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
       const cleanUrl = url.replace(/(\.(webp|jpg|png)).*$/, '$1');
-      return '/api/cdn' + cleanUrl + '?t=' + Date.now();
+      const assetPath = cleanUrl.startsWith('/') ? cleanUrl.slice(1) : cleanUrl;
+      return '/api/cdn?path=' + encodeURIComponent(assetPath) + '&t=' + Date.now();
     };
 
     const normalizeImages = (images) => {
