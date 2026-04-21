@@ -332,7 +332,7 @@ const loadBuilding = (keepSettings = false) => {
       hasFloorPlate.value = building.value.floor_plates.length > 0;
       floorUnitStats.value = res.data.floor_unit_stats || {};
     })
-    .finally(() => acceptSettingsUpdate.value = true);
+    .finally(() => nextTick(() => { acceptSettingsUpdate.value = true; }));
 }
 
 const openUnitDrawer = (unit) => {
