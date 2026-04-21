@@ -15,7 +15,9 @@ export default async function handler(req, res) {
   const response = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0',
-      'Accept': '*/*',
+      'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+      'Origin': 'https://api.kredium.io',
+      'Referer': 'https://api.kredium.io/',
     },
   });
 
