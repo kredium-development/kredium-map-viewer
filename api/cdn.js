@@ -27,7 +27,15 @@ export default async function handler(req, res) {
   console.log('[cdn-proxy] content-length:', response.headers.get('content-length'));
 
   if (response.status !== 200) {
-    res.status(response.status).send(`CloudFront error: ${response.status}`);
+    const body = await response.text();
+
+    console.log('[cdn-proxy] ERROR STATUS:', response.status);
+    console.log('[cdn-proxy] ERROR BODY:', body);
+
+    res.status(response.status).send(
+      `CloudFront error: ${response.status}\n\n${body.slice(0, 1000)}`
+    );
+
     return;
   }
 
