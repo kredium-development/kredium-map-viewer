@@ -10,11 +10,13 @@ export default async function handler(req, res) {
   }
 
   const url = `https://dnodhcqyo2y9j.cloudfront.net/${path}`;
+  console.log('[image-proxy] upstream url:', url);
 
   let response;
   try {
     response = await fetch(url, {
       headers: {
+        'Host': 'dnodhcqyo2y9j.cloudfront.net',
         'User-Agent': 'Mozilla/5.0',
         'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
         'Origin': 'https://api.kredium.io',
@@ -25,12 +27,15 @@ export default async function handler(req, res) {
     return res.status(502).json({ error: 'Upstream fetch failed', detail: err.message });
   }
 
+  console.log('[image-proxy] upstream status:', response.status);
+
   if (response.status === 404) {
     return res.status(404).json({ error: 'Not found upstream' });
   }
 
   if (response.status !== 200) {
     const body = await response.text().catch(() => '');
+    console.log('[image-proxy] upstream error body:', body.slice(0, 500));
     return res.status(response.status).json({ error: `Upstream error ${response.status}`, detail: body.slice(0, 300) });
   }
 
