@@ -39,10 +39,7 @@ export default class BuildingService {
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
       const cleanUrl = url.replace(/(\.(webp|jpg|png)).*$/, '$1');
       const assetPath = cleanUrl.startsWith('/') ? cleanUrl.slice(1) : cleanUrl;
-      if (assetPath.startsWith('inventory/buildings/images/')) {
-        return '/api/image-proxy?path=' + encodeURIComponent(assetPath);
-      }
-      return 'https://api.kredium.io/' + assetPath;
+      return 'https://dnodhcqyo2y9j.cloudfront.net/' + assetPath;
     };
 
     const normalizeImages = (images) => {
