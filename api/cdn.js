@@ -9,7 +9,8 @@ export default async function handler(req, res) {
     return;
   }
 
-  const url = `https://api.kredium.io/${pathStr}`;
+  const url = `https://dnodhcqyo2y9j.cloudfront.net/${pathStr}`;
+
 
   const response = await fetch(url, {
     headers: {
