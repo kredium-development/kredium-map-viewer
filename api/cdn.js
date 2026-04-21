@@ -9,13 +9,12 @@ export default async function handler(req, res) {
     return;
   }
 
-  const url = `https://dnodhcqyo2y9j.cloudfront.net/${pathStr}`;
+  const url = `https://api.kredium.io/${pathStr}`;
 
   const response = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0',
-      'Referer': 'https://api.kredium.io',
-      'Origin': 'https://api.kredium.io',
+      'Accept': '*/*',
     },
   });
 
