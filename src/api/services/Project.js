@@ -31,17 +31,14 @@ export default class ProjectService {
         }
       }
       if (!url.startsWith('/')) url = '/' + url;
-      if (url.startsWith('/api/cdn?')) {
-        return url;
-      }
       if (url.startsWith('/api/cdn/')) {
         const assetPath = url.replace(/^\/api\/cdn\//, '').replace(/(\.(webp|jpg|png)).*$/, '$1');
-        return '/api/cdn?path=' + encodeURIComponent(assetPath) + '&t=' + Date.now();
+        return 'https://dnodhcqyo2y9j.cloudfront.net/' + assetPath;
       }
       if (url.startsWith('/proxy-assets/')) url = url.slice('/proxy-assets'.length);
       const cleanUrl = url.replace(/(\.(webp|jpg|png)).*$/, '$1');
       const assetPath = cleanUrl.startsWith('/') ? cleanUrl.slice(1) : cleanUrl;
-      return '/api/cdn?path=' + encodeURIComponent(assetPath) + '&t=' + Date.now();
+      return 'https://dnodhcqyo2y9j.cloudfront.net/' + assetPath;
     };
 
     const normalizeImages = (images) => {
